@@ -1,0 +1,131 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Stamp History
+{% endblock %}
+
+{% block main %}
+    <div class="w-full max-w-4xl p-8 bg-white rounded-2xl shadow-xl">
+        <h1 class="text-3xl font-extrabold mb-6 text-center text-gray-800">Travel Log</h1>
+        
+        <!-- Responsive Table Container -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Media</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        
+                        <!-- ADDED: Go There! Header -->
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Go There!</th>
+                        
+                        <!-- REMOVED: Duplicate "Action" header -->
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Delete</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for stamp in stamps %}
+                    <tr class="hover:bg-gray-50 transition duration-150">
+                        <!-- Location Name -->
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                            {{ stamp.location_name }}
+                        </td>
+                        <!-- Source Title -->
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                            {{ stamp.source }}
+                        </td>
+                        <!-- Media Type (Means) -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                {{ stamp.means }}
+                            </span>
+                        </td>
+                        <!-- Date -->
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ stamp.date_only }}
+                        </td>
+                        
+                        <!-- ADDED: Go There! Icon (Using map link for now) -->
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                            <a href="https://www.google.com/search?q=visit+{{ stamp.location_name }}" title="Go There" 
+                               class="text-blue-500 hover:text-blue-700 transition duration-150 transform hover:scale-110 inline-block">
+                                <!-- Plane Icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9L2 14v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+                                </svg>
+                            </a>
+                        </td>
+                        
+                        <!-- Delete Action (Original Column) -->
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                            <form action="/delete_stamp" method="post" class="inline">
+                                <!-- Pass the unique stamp ID securely -->
+                                <input type="hidden" name="stamp_id" value="{{ stamp.id }}">
+                                <button type="submit" 
+                                        class="text-red-600 hover:text-red-900 transition duration-150 transform hover:scale-110"
+                                        title="Delete this stamp">
+                                    
+                                    <!-- Trash Can Icon (SVG) -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 10-2 0v6a1 1 0 102 0V8z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-8 text-center text-gray-500 text-lg">
+                            No stamps found. Time to plan your first adventure!
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination (Load More Button) -->
+        {% if has_more %}
+        <div class="mt-6 text-center">
+            <!-- Link to the next page of stamps (e.g., /history?offset=10) -->
+            <a href="/history?offset={{ next_offset }}" 
+               class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full shadow-lg transition duration-150 transform hover:scale-[1.01]">
+                Load 5 More Stamps
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- Statistics Section -->
+        <div class="mb-8 border-b pb-4 mt-6">
+            <h2 class="text-xl font-bold mb-6 text-gray-700 text-center">Travel Means Breakdown</h2>
+            <div class="grid grid-cols-2 md:grid-cols-7 gap-3 text-sm font-semibold">
+                {% for stat in media_stats %}
+                <!-- Media Stat Card -->
+                <div class="p-3 bg-gray-100 rounded-lg shadow-sm">
+                    <p class="text-blue-600 text-lg font-extrabold text-center">{{ stat.count }}</p>
+                    <p class="text-gray-600 text-center">{{ stat.means | capitalize }}</p>
+                </div>
+                {% else %}
+                <p class="col-span-full text-center text-gray-500">No data yet!</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mb-8 border-b pb-4 mt-6">
+            <h2 class="text-xl font-bold mb-6 text-gray-700 text-center">Real or Fictional Breakdown</h2>
+            <div class="grid grid-cols-2 md:grid-cols-2 gap-3 text-sm font-semibold">
+                {% for stat in real_fiction %}
+                <div class="p-3 bg-gray-100 rounded-lg shadow-sm">
+                    <p class="text-blue-600 text-lg font-extrabold text-center">{{ stat.count }}</p>
+                    <p class="text-gray-600">{{ stat.real_fiction | capitalize }}</p>
+                </div>
+                {% else %}
+                <p class="col-span-full text-center text-gray-500 text-center">No data yet!</p>
+                {% endfor %}
+            </div>
+        </div>
+        
+    </div>
+{% endblock %}

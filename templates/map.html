@@ -1,0 +1,265 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Virtual Passport Map
+{% endblock %}
+
+{% block main %}
+
+    <!-- Leaflet CSS for map styling -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    
+    <!-- Leaflet Control Geocoder CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    
+    <!-- Load Tailwind for basic aesthetics -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <div class="container mx-auto p-4 max-w-4xl">
+        <h1 class="text-3xl font-bold mb-4 text-center">Your Virtual Passport: Pin a New Location</h1>
+
+        <!-- Map Container -->
+        <div id="map" class="w-full shadow-lg rounded-xl mb-6 border-4 border-gray-200 z-10 relative" style="height: 60vh;"></div>
+        
+        <!-- Form to submit the new Stamp data -->
+        <form id="stamp-form" action="/pin" method="post" class="bg-white p-6 rounded-xl shadow-lg border">
+            <h2 class="text-2xl font-semibold mb-4 text-center">New Stamp Details</h2>
+
+            <!-- Hidden fields to store coordinates -->
+            <input type="hidden" name="latitude" id="latitude">
+            <input type="hidden" name="longitude" id="longitude">
+
+            <!-- Location Type: Real / Fictional Radio Buttons -->
+            <div class="mb-4">
+                <!-- Main Label/Header -->
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Location Type:
+                </label>
+
+                <div class="flex items-center space-x-6">
+                    <!-- Real Option -->
+                    <div class="flex items-center space-x-1">
+                        <input type="radio" id="real" name="location_type" value="real" required
+                               class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                        <label for="real" class="text-sm font-medium text-gray-700">
+                            Real Destiny
+                        </label>
+                    </div>
+
+                    <!-- Fictional Option -->
+                    <div class="flex items-center space-x-1">
+                        <input type="radio" id="fictional" name="location_type" value="fictional" required
+                               class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                        <label for="fictional" class="text-sm font-medium text-gray-700">
+                            Fictional Destiny
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+             <div class="mb-4 mt-6">
+                <label for="location_name" class="block text-sm font-medium text-gray-700">Location Name:</label>
+                <input type="text" id="location_name" name="location_name" required
+                        placeholder="Albuquerque, Middle Earth..." 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+            </div>
+            
+            <div class="mb-4">
+                <!-- Data List (Autocomplete) for Source -->
+                <datalist id="source-list"></datalist>
+                <label for="source" class="block text-sm font-medium text-gray-700">Source:</label>
+                <input type="text" id="source" name="source" required list="source-list"
+                        placeholder="Breaking Bad, THe Lord of the Rings..."
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+            </div>
+           
+            <div class="mb-4">
+                <label for="means" class="block text-sm font-medium text-gray-700">Media Type:</label>
+                <select id="means" name="means" required 
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                    <option value="" disabled selected>Select the media type...</option>
+                    <option value="book">Book</option>
+                    <option value="movie">Movie</option>
+                    <option value="tvseries">TV Series</option>
+                    <option value="comic">Comic</option>
+                    <option value="video_game">Video Game</option>  
+                    <option value="song">Song</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" id="submit-button" disabled 
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-150 opacity-50 cursor-not-allowed">
+                    Stamp Your Passport
+                </button>
+                <p id="instruction-message" class="mt-2 text-sm text-red-500 font-medium">Click on the map to select a location first.</p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Leaflet JS for map functionality -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- ADDED: Leaflet Control Geocoder JS -->
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <script>
+    window.onload = function() {
+
+        const existingStamps = {{ (stamps or []) | tojson | safe }};
+        const rawSources = {{ (unique_sources or []) | tojson | safe }};
+        const centerLat = {{ center_lat | default(40) }};
+        const centerLon = {{ center_lon | default(-98) }};
+
+        const sourceDatalist = document.getElementById('source-list');
+        if (sourceDatalist && Array.isArray(rawSources)) {
+            rawSources.forEach(source => {
+                const option = document.createElement('option');
+                option.value = source.source || source;
+                sourceDatalist.appendChild(option);
+            });
+        }
+
+        try {
+            if (typeof L === 'undefined' || !document.getElementById('map')) {
+                throw new Error("Leaflet library not loaded or map container not found.");
+            }
+
+            // Start zoomed out for global context
+            const map = L.map('map').setView([centerLat, centerLon], 3);
+            let currentMarker = null;
+
+            // Custom icons
+            const realIcon = L.icon({
+                iconUrl: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+                iconSize: [32, 32],
+                iconAnchor: [16, 32],
+                popupAnchor: [0, -28]
+            });
+
+            const fictionalIcon = L.icon({
+                iconUrl: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                iconSize: [32, 32],
+                iconAnchor: [16, 32],
+                popupAnchor: [0, -28]
+            });
+
+            // Add search (geocoder)
+            L.Control.geocoder({
+                defaultMarkGeocode: false,
+                placeholder: 'Search for a fictional location...',
+                language: 'en',
+                geocoder: new L.Control.Geocoder.Nominatim()
+            })
+            .on('markgeocode', function(e) {
+                const result = e.geocode;
+                const latlng = result.center;
+                const locationName = result.name;
+                map.setView(latlng, 10);
+                handleMapClick({ latlng });
+                document.getElementById('location_name').value = locationName.split(',')[0].trim();
+            })
+            .addTo(map);
+
+            // HTTPS tile layer
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                maxZoom: 19,
+            }).addTo(map);
+
+            setTimeout(() => map.invalidateSize(), 100);
+
+            const latInput = document.getElementById('latitude');
+            const lonInput = document.getElementById('longitude');
+            const submitButton = document.getElementById('submit-button');
+            const instructionMessage = document.getElementById('instruction-message');
+
+            // Handle map clicks
+            function handleMapClick(e) {
+                const lat = e.latlng.lat;
+                const lng = e.latlng.lng;
+
+                if (currentMarker) map.removeLayer(currentMarker);
+
+                const locationType = document.querySelector('input[name="location_type"]:checked')?.value;
+                const iconToUse = locationType === 'fictional' ? fictionalIcon : realIcon;
+
+                currentMarker = L.marker([lat, lng], { icon: iconToUse })
+                    .addTo(map)
+                    .bindPopup(`Pin at: ${lat.toFixed(4)}, ${lng.toFixed(4)}`).openPopup();
+
+                latInput.value = lat;
+                lonInput.value = lng;
+
+                submitButton.disabled = false;
+                submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                instructionMessage.textContent = 'Location selected. Fill in details and click "Stamp Your Passport"!';
+                instructionMessage.classList.remove('text-red-500');
+                instructionMessage.classList.add('text-green-600');
+            }
+
+            // Generate random coordinates in your specified square
+            function generateRandomEquatorialCoords() {
+                // Latitude between -2 and +2
+                const lat = Math.random() * (2 - (-2)) + (-2);
+                // Longitude between -28 and -24
+                const lng = Math.random() * (-24 - (-28)) + (-28);
+                return L.latLng(lat, lng);
+            }
+
+            // 🎨 Real vs Fictional logic
+            const locationTypeInputs = document.querySelectorAll('input[name="location_type"]');
+            locationTypeInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    if (this.value === 'fictional') {
+                        const randomLatLng = generateRandomEquatorialCoords();
+                        map.setView(randomLatLng, 6); // zoom closer after placing fictional pin
+                        handleMapClick({ latlng: randomLatLng });
+                        document.getElementById('location_name').value = "";
+                    } else if (currentMarker) {
+                        map.removeLayer(currentMarker);
+                        currentMarker = null;
+                        latInput.value = '';
+                        lonInput.value = '';
+                        submitButton.disabled = true;
+                        instructionMessage.textContent = 'Click on the map or search to select a location first.';
+                        instructionMessage.classList.remove('text-green-600');
+                        instructionMessage.classList.add('text-red-500');
+                    }
+                });
+            });
+
+            // Map click listener
+            map.on('click', handleMapClick);
+
+            // Plot saved stamps
+            function plotExistingStamps(stampsArray) {
+                if (stampsArray && stampsArray.length > 0) {
+                    stampsArray.forEach(stamp => {
+                        const mediaLabel = stamp.means
+                            ? stamp.means.charAt(0).toUpperCase() + stamp.means.slice(1)
+                            : '';
+                        const iconToUse = stamp.location_type === 'fictional' ? fictionalIcon : realIcon;
+                        L.marker([stamp.latitude, stamp.longitude], { icon: iconToUse })
+                            .addTo(map)
+                            .bindPopup(`
+                                <strong>${stamp.location_name}</strong><br>
+                                <em>Source: ${stamp.source} (${mediaLabel})</em>
+                            `);
+                    });
+                }
+            }
+
+            plotExistingStamps(existingStamps);
+
+        } catch (error) {
+            const mapDiv = document.getElementById('map');
+            if (mapDiv) {
+                mapDiv.innerHTML = '<div class="flex items-center justify-center h-full text-lg text-red-600">Map failed to load. Check console for Leaflet errors or network issues.</div>';
+            }
+            console.error("Map Initialization Error:", error);
+        }
+    };
+</script>
+{% endblock %}

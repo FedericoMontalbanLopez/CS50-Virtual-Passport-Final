@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+flask_session/
+*.swp
+<<<<<<< HEAD
+
+=======
+>>>>>>> 0116a4d88aa52c60012489cff178d0215ba59a47
