@@ -15,11 +15,7 @@
         AI Adventure Planner
     </h1>
     <p class="text-center text-gray-600 mb-6">
-<<<<<<< HEAD
         Tell us where you want to go, and Gemini will suggest fictional adventures to take you there.
-=======
-        Tell us where you want to go, and AI will suggest fictional adventures to take you there.
->>>>>>> 0116a4d88aa52c60012489cff178d0215ba59a47
     </p>
 
     <form id="planner-form" class="space-y-4">
@@ -57,7 +53,6 @@ const loadingSpinner = document.getElementById('loading-spinner');
 const aiOutput = document.getElementById('ai-output');
 const generateButton = document.getElementById('generate-button');
 
-<<<<<<< HEAD
 // --- GEMINI API SETUP ---
 // The API key is injected by the Canvas environment if left empty.
 const apiKey = ""; 
@@ -97,8 +92,6 @@ async function fetchWithBackoff(url, options, retries = 3, delay = 1000) {
     }
 }
 
-=======
->>>>>>> 0116a4d88aa52c60012489cff178d0215ba59a47
 async function generateAdventure(event) {
     event.preventDefault();
     const location = locationInput.value.trim();
@@ -110,7 +103,6 @@ async function generateAdventure(event) {
     generateButton.disabled = true;
     generateButton.textContent = 'Suggesting...';
 
-<<<<<<< HEAD
     // System Instruction guides the LLM's persona and output
     const systemPrompt = `You are a whimsical and knowledgeable Fiction Travel Agent. Your task is to suggest fictional media (books, movies, or TV series) that will let the user 'travel' to the user's requested location. Provide 3 distinct suggestions. For each suggestion, provide the Title, the Media Type, and a short, fun justification (1 sentence). Format your response strictly in Markdown using an unordered list.`;
     
@@ -154,26 +146,10 @@ async function generateAdventure(event) {
         } else {
             // Handle case where API succeeds but returns no text (e.g., safety block)
             aiOutput.innerHTML = `<p class="text-red-600">Sorry, I couldn't find any adventures for that location or the response was blocked.</p>`;
-=======
-    try {
-        const response = await fetch("/generate-adventure", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ location })
-        });
-
-        const result = await response.json();
-        if (result.text) {
-            aiOutput.innerHTML = marked.parse(result.text);
-            aiOutput.classList.remove('hidden');
-        } else {
-            aiOutput.innerHTML = `<p class="text-red-600">${result.error}</p>`;
->>>>>>> 0116a4d88aa52c60012489cff178d0215ba59a47
             aiOutput.classList.remove('hidden');
         }
 
     } catch (error) {
-<<<<<<< HEAD
         console.error("AI Generation Failed:", error);
         let userErrorMessage = "Error: Could not connect to the Adventure Planner. Check console for details (e.g., API key or network issues).";
         
@@ -187,12 +163,6 @@ async function generateAdventure(event) {
 
     } finally {
         // 3. Restore Button State
-=======
-        console.error(error);
-        aiOutput.innerHTML = `<p class="text-red-600">Error: Could not generate adventures.</p>`;
-        aiOutput.classList.remove('hidden');
-    } finally {
->>>>>>> 0116a4d88aa52c60012489cff178d0215ba59a47
         loadingSpinner.classList.add('hidden');
         generateButton.disabled = false;
         generateButton.textContent = 'Suggest My Adventure';

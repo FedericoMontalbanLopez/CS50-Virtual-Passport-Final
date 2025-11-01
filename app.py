@@ -337,31 +337,6 @@ def map_page():
 @app.route("/plan")
 @login_required
 def plan():
-<<<<<<< HEAD
     """Renders the AI Adventure Planner page."""
     # Renders the HTML template containing the client-side Gemini API call
     return render_template("plan.html")
-=======
-    return render_template("generate-adventure.html")
-
-
-@app.route("/generate", methods=["POST"])
-def generate_text():
-    data = request.json
-    prompt = data.get("prompt", "")
-    
-    if not prompt:
-        return jsonify({"error": "No prompt provided"}), 400
-
-    try:
-        output = generator(prompt, max_new_tokens=50)
-        text = output[0]["generated_text"]
-        return jsonify({"generated_text": text})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-if __name__ == "__main__":
-    app.run(debug=True)
-
-       
->>>>>>> 0116a4d88aa52c60012489cff178d0215ba59a47
