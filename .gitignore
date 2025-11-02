@@ -1,9 +1,23 @@
-venv/
-__pycache__/
+Python artifacts
+
+pycache/
 *.pyc
+
+Virtual Environment (VSC shows this as 'venv')
+
+/venv
+/env
+
+Flask artifacts and session data
+
+instance/
 flask_session/
 *.swp
-<<<<<<< HEAD
 
-=======
->>>>>>> 0116a4d88aa52c60012489cff178d0215ba59a47
+Database file (prevents commiting local test data)
+
+project.db
+
+SECURITY: Environment variables (Crucial for API Key)
+
+.env

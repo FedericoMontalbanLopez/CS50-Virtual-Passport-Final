@@ -1,11 +1,14 @@
 import os
 
+from dotenv import load_dotenv
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session, jsonify
+from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import apology, login_required
+
+load_dotenv() 
 
 # Configure application
 app = Flask(__name__)
@@ -338,5 +341,9 @@ def map_page():
 @login_required
 def plan():
     """Renders the AI Adventure Planner page."""
+
+    # Securely retrieve the key from the environment variables
+    gemini_key = os.getenv("GEMINI_API_KEY")
+
     # Renders the HTML template containing the client-side Gemini API call
-    return render_template("plan.html")
+    return render_template("plan.html", gemini_key=gemini_key)
