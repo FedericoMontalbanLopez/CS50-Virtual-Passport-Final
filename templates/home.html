@@ -1,59 +1,42 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Passport Dashboard
+    Home
 {% endblock %}
 
 {% block main %}
-    <!-- Main Welcome Card -->
-    <div class="w-full max-w-2xl p-8 bg-white rounded-2xl shadow-2xl border border-gray-100 transform hover:scale-[1.01] transition duration-300">
+    <div class="w-full max-w-2xl p-8 bg-[#fffbf1] opacity-90 rounded-2xl shadow-2xl border border-gray-100 transform hover:scale-[1.01] transition duration-300">
         
         <!-- Welcome Message -->
-        <h1 class="text-4xl font-extrabold mb-4 text-center text-gray-800">
-            Welcome, {% if username %}{{ username }}{% else %}Traveler{% endif %}!
+        <h1 class="text-3xl font-bold mb-4 text-center text-gray-800">
+            This is FICTIONAL PASSPORT
         </h1>
-        
-        <p class="text-lg text-center text-gray-600 mb-8">
-            Here you can view and manage your travel stamps.
+
+         <h2 class="text-xl font-light italic mb-4 text-center text-gray-600">
+            With your <b>fictional passport</b> you can track every destination—from Venice to Mars, from Albuquerque to Middle Earth—based on the books, comics, movies, and series that transport you there.
+        </h2>
+       
+    </div>
+
+    <div class="my-1 w-full max-w-2xl mx-auto p-8 bg-[#6daba4] opacity-90 rounded-xl shadow-2xl border border-[#6daba4]">
+        <!-- Image centered with max width of 80% of its container -->
+        <img src="/static/home_image.png" alt="Illustration of a stylized passport or globe" 
+             class="block mx-auto w-4/5 max-w-sm h-auto rounded-xl shadow-lg transition duration-500" 
+             onerror="this.onerror=null; this.src='https://placehold.co/400x300/F0F0F0/333?text=Passport+Image+Missing';"
+        >
+    </div>
+
+    <div class="w-full max-w-2xl p-8 bg-[#fffbf1] opacity-90 rounded-2xl shadow-2xl border border-gray-100">
+                       
+        <p class="text-xl text-center text-gray-700 mt-1 mb-1 italic font-light">
+            They know the world
+        </p>
+        <p class="text-xl text-center text-gray-700 mt-1 mb-4 italic font-light">
+            without even going out the door.
+        </p>
+        <p class="text-xs text-center text-gray-600 mb-3">
+            Poem 47 of the Dao De Jing (translated by Thomas Cleary).
         </p>
 
-        <hr class="mb-8 border-t border-blue-100">
-
-        <!-- Passport Summary Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-            
-            <!-- Total Stamps Placeholder -->
-            <div class="p-4 bg-blue-50 rounded-lg shadow-inner">
-                <p class="text-4xl font-bold text-blue-600">
-                    {% if stamp_count %}{{ stamp_count }}{% else %}0{% endif %}
-                </p>
-                <p class="text-sm font-medium text-blue-800 mt-1">Total Stamps</p>
-                <a href="/map" class="inline-block text-blue-700 hover:text-white-100 font-bold py-3 px-8 rounded-full hover:shadow-xl transition duration-300 transform hover:-translate-y-0.5">
-                    Details
-                </a>
-            </div>
-
-            <!-- Call to Action Card -->
-            <div class="md:col-span-2 p-6 bg-green-500 rounded-xl shadow-xl transition hover:shadow-2xl">
-                <p class="text-white text-xl font-semibold mb-3">Where have you traveled lately?</p>
-                <a href="/map" class="inline-block bg-white text-green-700 hover:text-green-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-0.5">
-                    Stamp Your Next Location
-                </a>
-            </div>
-            
-        </div>
-
-        <hr class="mt-8 mb-8 border-t border-[#FFD700] opacity-90">
-        <!-- Adventure Planning Card --> 
-        <div class="grid grid-cols-1 gap-6 text-center">
-            
-        <!-- Adventure Planning Call to Action -->       
-        <div class="col-span-1 p-6 bg-red-500 rounded-xl shadow-xl transition hover:shadow-2xl text-center">
-            <p class="text-white text-xl font-semibold mb-3">Where do you want to travel?</p>
-            <a href="/plan" class="inline-block bg-white text-green-700 hover:text-green-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-0.5">
-                Plan Your Next Adventure! 
-            </a>
-        </div>
-        
     </div>
 {% endblock %}
