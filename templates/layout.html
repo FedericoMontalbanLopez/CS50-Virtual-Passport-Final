@@ -41,19 +41,19 @@
                     {% if session["user_id"] %}
                         
                         <!-- Logged In Links -->
-                        <a class="text-gray-600 hover:text-blue-500 transition duration-150" href="/map">New Stamp</a>
-                        <a class="text-gray-600 hover:text-blue-500 transition duration-150" href="/passport">Passport</a>
-                        <a class="text-gray-600 hover:text-blue-500 transition duration-150" href="/history">History</a>
-                        <a class="text-gray-600 hover:text-blue-500 transition duration-150" href="/plan">Plan</a>
+                        <a class="text-gray-600 hover:text-[#6daba4] transition duration-150" href="/passport">Passport</a>
+                        <a class="text-gray-600 hover:text-[#6daba4] transition duration-150" href="/map">New Stamp</a>
+                        <a class="text-gray-600 hover:text-[#6daba4] transition duration-150" href="/history">History</a>
+                        <a class="text-gray-600 hover:text-[#6daba4] transition duration-150" href="/plan">AI Planner</a>
                                                 
                         <!-- Logout -->
-                        <a class="text-red-500 hover:text-red-700 transition duration-150" href="/logout">Log Out</a>
+                        <a class="text-[#885C45] hover:text-red-700 transition duration-150" href="/logout">Log Out</a>
                     
                     {% else %}
                         
                         <!-- Logged Out Links -->
-                        <a class="text-gray-600 hover:text-blue-500 transition duration-150" href="/register">Register</a>
-                        <a class="text-gray-600 hover:text-blue-500 transition duration-150" href="/login">Log In</a>
+                        <a class="text-gray-600 hover:[#6daba4] transition duration-150" href="/register">Register</a>
+                        <a class="text-gray-600 hover:[#6daba4] transition duration-150" href="/login">Log In</a>
                     
                     {% endif %}
                 </div>
