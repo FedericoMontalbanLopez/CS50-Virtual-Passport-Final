@@ -1,8 +1,6 @@
-/* -------------------------------------------
-   Custom Background Style for the whole body 
-   ------------------------------------------- */
+/* Custom Background Style for the whole body */
 .app-background {
-    background-image: url('/static/world_map.jpg'); /* CHANGE 'world_map.jpg' to your filename */
+    background-image: url('background.jpg'); 
     background-size: cover;
     background-attachment: fixed; /* Optional: Makes the background scroll independently */
     background-position: center;

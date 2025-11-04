@@ -16,13 +16,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <div class="container mx-auto p-4 max-w-4xl">
+        
+        <div class="bg-[#fffbf1] opacity-95 p-3 rounded-xl shadow-lg border mb-2">
         <h1 class="text-3xl font-bold mb-4 text-center">Your Virtual Passport: Pin a New Location</h1>
+        </div>
 
         <!-- Map Container -->
         <div id="map" class="w-full shadow-lg rounded-xl mb-6 border-4 border-gray-200 z-10 relative" style="height: 60vh;"></div>
         
         <!-- Form to submit the new Stamp data -->
-        <form id="stamp-form" action="/pin" method="post" class="bg-white p-6 rounded-xl shadow-lg border">
+        <form id="stamp-form" action="/pin" method="post" class="bg-[#fffbf1] opacity-95 p-6 rounded-xl shadow-lg border">
             <h2 class="text-2xl font-semibold mb-4 text-center">New Stamp Details</h2>
 
             <!-- Hidden fields to store coordinates -->
@@ -40,7 +43,7 @@
                     <!-- Real Option -->
                     <div class="flex items-center space-x-1">
                         <input type="radio" id="real" name="location_type" value="real" required
-                               class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                               class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-[#6daba4]">
                         <label for="real" class="text-sm font-medium text-gray-700">
                             Real Destiny
                         </label>
@@ -49,7 +52,7 @@
                     <!-- Fictional Option -->
                     <div class="flex items-center space-x-1">
                         <input type="radio" id="fictional" name="location_type" value="fictional" required
-                               class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                               class="h-4 w-4 text-blue-600 border-gray-300 focus:[#6daba4]">
                         <label for="fictional" class="text-sm font-medium text-gray-700">
                             Fictional Destiny
                         </label>
@@ -69,7 +72,7 @@
                 <datalist id="source-list"></datalist>
                 <label for="source" class="block text-sm font-medium text-gray-700">Source:</label>
                 <input type="text" id="source" name="source" required list="source-list"
-                        placeholder="Breaking Bad, THe Lord of the Rings..."
+                        placeholder="Breaking Bad, The Lord of the Rings..."
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
             </div>
            
@@ -90,10 +93,10 @@
 
             <div class="text-center">
                 <button type="submit" id="submit-button" disabled 
-                        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-150 opacity-50 cursor-not-allowed">
+                        class="bg-[#885C45] hover:bg-[#6A4734] text-white font-bold py-2 px-4 rounded transition duration-150 opacity-50 cursor-not-allowed">
                     Stamp Your Passport
                 </button>
-                <p id="instruction-message" class="mt-2 text-sm text-red-500 font-medium">Click on the map to select a location first.</p>
+                <p id="instruction-message" class="mt-2 text-sm text-[#885C45] font-medium">Click on the map to select a location first.</p>
             </div>
         </form>
     </div>

@@ -14,9 +14,6 @@ load_dotenv()
 app = Flask(__name__)
 
 
-# Load the text generation model locally
-# generator = pipeline("text-generation", model="sshleifer/tiny-distilgpt2", device=-1)
-
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -24,11 +21,6 @@ Session(app)
 
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///project.db")
-
-# Ensure environment variable is set for API key if needed later
-# if not os.environ.get("API_KEY"):
-#     raise RuntimeError("API_KEY not set")
-
 
 @app.after_request
 def after_request(response):
@@ -38,10 +30,19 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-
 @app.route("/")
+def index():
+    """Renders the appropriate home page based on login status."""
+    if session.get("user_id"):
+        # If logged in, redirect to the Passport Dashboard
+        return redirect("/passport")
+    else:
+        # If logged out, show the welcome page
+        return render_template("home.html")
+
+@app.route("/passport")
 @login_required
-def home():
+def passport():
     """Welcome page. Show user's passport summary, including stamp count."""
 
     user_id = session["user_id"]
@@ -53,13 +54,7 @@ def home():
     stamp_count_rows = db.execute("SELECT COUNT(id) AS total FROM stamps WHERE user_id = ?", user_id)
     stamp_count = stamp_count_rows[0]["total"] if stamp_count_rows else 0
     
-    return render_template("home.html", username=username, stamp_count=stamp_count)
-
-from flask import render_template, request, session
-from helpers import login_required
-from cs50 import SQL # Ensure this import is available in your app.py
-
-# Assume 'db' is initialized globally, e.g., db = SQL("sqlite:///project.db") 
+    return render_template("passport.html", username=username, stamp_count=stamp_count)
 
 @app.route("/history")
 @login_required
@@ -194,7 +189,7 @@ def login():
         
         # Log user in by storing their id in session
         session["user_id"] = user[0]["id"]
-        return redirect("/")
+        return redirect("/passport")
     
     # Handle GET request
     else:
@@ -251,7 +246,7 @@ def register():
         session["user_id"] = rows[0]["id"]
 
         flash("Successfully registered!")
-        return redirect("/")
+        return redirect("/passport")
     
     # Handle GET request
     else:
@@ -300,7 +295,7 @@ def pin():
             longitude
         )
         flash(f"Passport stamped for {location_name} (from {source})!")
-        return redirect("/")
+        return redirect("/passport")
 
     except Exception:
         # Catch unexpected database errors

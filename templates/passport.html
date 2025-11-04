@@ -6,7 +6,7 @@
 
 {% block main %}
     <!-- Main Welcome Card -->
-    <div class="w-full max-w-2xl p-8 bg-white rounded-2xl shadow-2xl border border-gray-100 transform hover:scale-[1.01] transition duration-300">
+    <div class="w-full max-w-2xl p-8 bg-[#fffbf1] opacity-95 rounded-2xl shadow-2xl border border-gray-100 transform hover:scale-[1.01] transition duration-300">
         
         <!-- Welcome Message -->
         <h1 class="text-4xl font-extrabold mb-4 text-center text-gray-800">
@@ -14,43 +14,44 @@
         </h1>
         
         <p class="text-lg text-center text-gray-600 mb-8">
-            Here you can view and manage your travel stamps.
+            Here you can view and manage your fictional passport.
         </p>
 
-        <hr class="mb-8 border-t border-blue-100">
+        <hr class="mb-8 border-t border-[#885C45]">
 
         <!-- Passport Summary Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             
             <!-- Total Stamps Placeholder -->
-            <div class="p-4 bg-blue-50 rounded-lg shadow-inner">
-                <p class="text-4xl font-bold text-blue-600">
+            <div class="p-4 bg-[#6daba4] rounded-lg shadow-inner">
+                <p class="text-4xl font-bold text-white">
                     {% if stamp_count %}{{ stamp_count }}{% else %}0{% endif %}
                 </p>
-                <p class="text-sm font-medium text-blue-800 mt-1">Total Stamps</p>
-                <a href="/map" class="inline-block text-blue-700 hover:text-white-100 font-bold py-3 px-8 rounded-full hover:shadow-xl transition duration-300 transform hover:-translate-y-0.5">
+                <p class="text-sm font-medium text-white mt-1">Total Stamps</p>
+                <a href="/map" class="inline-block mt-1 bg-white text-[#6daba4] hover:text-green-900 font-bold py-2 px-6 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-0.5">
                     Details
                 </a>
             </div>
 
             <!-- Call to Action Card -->
-            <div class="md:col-span-2 p-6 bg-green-500 rounded-xl shadow-xl transition hover:shadow-2xl">
+            <div class="md:col-span-2 p-6 bg-[#ddb400] rounded-xl shadow-xl transition hover:shadow-2xl">
                 <p class="text-white text-xl font-semibold mb-3">Where have you traveled lately?</p>
-                <a href="/map" class="inline-block bg-white text-green-700 hover:text-green-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-0.5">
+                <a href="/map" class="inline-block bg-white text-[#ddb400] hover:text-green-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-0.5">
                     Stamp Your Next Location
                 </a>
             </div>
             
         </div>
 
-        <hr class="mt-8 mb-8 border-t border-[#FFD700] opacity-90">
+        <hr class="mt-8 mb-8 border-t border-[#885C45] opacity-90">
+        
         <!-- Adventure Planning Card --> 
         <div class="grid grid-cols-1 gap-6 text-center">
             
         <!-- Adventure Planning Call to Action -->       
-        <div class="col-span-1 p-6 bg-red-500 rounded-xl shadow-xl transition hover:shadow-2xl text-center">
+        <div class="col-span-1 p-6 bg-[#885C45] rounded-xl shadow-xl transition hover:shadow-2xl text-center">
             <p class="text-white text-xl font-semibold mb-3">Where do you want to travel?</p>
-            <a href="/plan" class="inline-block bg-white text-green-700 hover:text-green-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-0.5">
+            <a href="/plan" class="inline-block bg-white text-[#885C45] hover:text-green-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-0.5">
                 Plan Your Next Adventure! 
             </a>
         </div>
