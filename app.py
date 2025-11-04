@@ -162,18 +162,23 @@ def login():
     """Log user in"""
 
     # Forget any user_id
-    session.clear()
+    
     
     # Handle POST request
     if request.method == "POST":
         
+        session.clear()
+        
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 403)
+            flash("must provide name")
+            return redirect("/login")
         
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 403)
+                
+            flash("must provide password")
+            return redirect("/login")
         
         # Convert username to lowercase to match to database storage
         username = request.form.get("username").lower()
@@ -185,7 +190,8 @@ def login():
         if len(user) != 1 or not check_password_hash(
             user[0]["hash"], request.form.get("password")
         ):
-            return apology("invalid username and/or password", 403)
+            flash("Invalid username or password.")
+            return redirect("/login")
         
         # Log user in by storing their id in session
         session["user_id"] = user[0]["id"]
