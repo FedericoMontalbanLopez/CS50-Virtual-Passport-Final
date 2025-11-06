@@ -1,22 +1,24 @@
 # 🌍 Fictional Passport
 
-**CS50 Final Project | [Year]**  
+**CS50 Final Project | 2025**  
 **Author:** Federico Montalbán López
 
 ---
 
-## ✨ Project Concept & Theme
+## Project Concept & Theme
 
 **Fictional Passport** is a web application that tracks journeys made through imagination — letting users log both **real** and **fictional** destinations inspired by the stories they love.  
-From *Venice* to *Middle Earth*, or *Albuquerque* to *Gotham City*, users can record every “place” they’ve visited through books, movies, series, or songs.
 
-> _"They know the world without even going out the door."_
+From *Venice* to *Middle Earth*, from *Albuquerque* to *Gotham City*, users can record every place they’ve "visited" through books, comics, movies, series, or songs.
 
-This project celebrates storytelling, creativity, and exploration through a playful, data-driven interface.
+This web is inspired by a line from the Dao De Jing:
+
+> _"They know the world without even going out the door."_ (poem 47, translated by Thomas Cleary)
+
 
 ---
 
-## 🛠️ Technical Stack
+## Technical Stack
 
 - **Backend:** Python, Flask  
 - **Database:** SQLite3  
@@ -27,10 +29,10 @@ This project celebrates storytelling, creativity, and exploration through a play
 
 ---
 
-## 🚀 Key Features & Technical Achievements
+## Key Features & Technical Achievements
 
-### 1. 🧭 AI Adventure Planner (Gemini API Integration)
-A standout feature demonstrating advanced API integration and prompt design.
+### 1. AI Adventure Planner (Gemini API Integration)
+
 
 - **Client-Side Fetch:** The Gemini API is called securely from the browser using `fetch`, ensuring fast, non-blocking responses.  
 - **System Persona:** The LLM is instructed to act as a *“whimsical and knowledgeable Fiction Travel Agent.”*  
@@ -39,25 +41,25 @@ A standout feature demonstrating advanced API integration and prompt design.
 
 ---
 
-### 2. 🗺️ Interactive Map (Leaflet.js)
+### 2. Interactive Map (Leaflet.js)
 A creative “stamping” interface that visually tracks each destination.
 
 - **Dynamic Centering:** Automatically centers on the user’s most recent stamp.  
 - **Geocoding Search:** Users can search for a city (e.g., *“Albuquerque”*) to quickly place a pin.  
-- **Fictional Mode:** Choosing “Fictional” automatically drops a random pin within the **Bermuda Triangle**, adding a whimsical touch.
+- **Fictional Mode:** Choosing “Fictional” automatically drops a random pin within a defined square (of pure water) in the midlle of Atlantic Ocean.
 
 ---
 
-### 3. 📊 Data Management & User Interface
+### 3. Data Management & User Interface
 Secure, responsive, and optimized for smooth performance.
 
 - **Responsive History Log:** Uses SQL `LIMIT` and `OFFSET` to implement pagination that loads entries in blocks of 5 without reloading the page.  
-- **Data Insights:** Displays statistics showing the user’s travel frequency by media type (*Book*, *Movie*, *TV Series*).  
+- **Data Insights:** Displays statistics showing the user’s travel frequency by media type (*Book*, *Movie*, *TV Series*) and real destinatios vs. fictional destinations. 
 - **Security & Deletion:** Passwords are hashed using `generate_password_hash`. Stamps can only be deleted by the logged-in user who created them.
 
 ---
 
-## ⚙️ Setup & Installation
+## Setup & Installation
 
 ### 1. Clone the Repository
 ```bash
@@ -77,8 +79,13 @@ pip install Flask flask-session cs50 werkzeug python-dotenv
 ```
 
 ### 4. Database Setup
-- Create an empty SQLite file named `project.db`.  
-- Initialize the database with the `users` and `stamps` tables (schemas are in `app.py` or a `schema.sql` file).
+- Create an empty SQLite file named `project.db` in the project root.
+- **Initialize the tables** by executing the SQL commands in `schema.sql`.
+
+```bash
+sqlite3 project.db < schema.sql
+```
+
 
 ### 5. Configure Your Gemini API Key
 Create a `.env` file in the project root:
@@ -92,16 +99,12 @@ flask run
 ```
 Access the app at: http://127.0.0.1:5000
 
-## 🎥 Demo & Visuals
+## Demo 
 
-**Demo Video:** _[Add YouTube link here after submission]_  
+**Demo Video:** https://youtu.be/MBBFH-Dfjtg  
 
-**Screenshots:**  
-- 🏠 **Homepage** — quote and login  
-- 🗺️ **Map** — dynamic pin stamping  
-- 📖 **History** — paginated travel log and stats
 
-## 💬 Reflection
+## Reflection
 
 **Fictional Passport** blends imagination and technology, turning every story into a destination.  
 This project combines **web development, AI integration, and secure data handling** to celebrate the worlds we explore through art, not just geography.
