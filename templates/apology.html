@@ -5,7 +5,37 @@
 {% endblock %}
 
 {% block main %}
-    <!-- https://memegen.link/ -->
-    <!-- https://knowyourmeme.com/memes/grumpy-cat -->
-    <img alt="{{ top }}" class="border img-fluid" src="https://api.memegen.link/images/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?background=https://i.imgur.com/CsCgN7Ll.png&width=400" title="{{ top }}">
+    <div class="w-full max-w-lg p-8 bg-[#fffbf1] opacity-90 rounded-2xl shadow-2xl border border-gray-100 mx-auto text-center">
+        
+        <!-- Error Status Code -->
+        <h2 class="text-6xl font-extrabold text-red-600 mb-4">
+            {{ top }}
+        </h2>
+        
+        <p class="text-xl font-semibold text-gray-800 mb-6">
+            Oops! Wrong Turn on Your Journey.
+        </p>
+
+        <!-- Thematic Image -->
+        <div class="my-6">
+            <img alt="Error illustration showing a compass and a misplaced traveler" 
+                 class="block mx-auto img-fluid" 
+                 src="https://placehold.co/400x300/F0F0F0/333?text=Oops!+Wrong+Turn" 
+                 style="max-width: 100%; height: auto; border-radius: 8px;"
+            >
+        </div>
+
+        <!-- Detailed Error Message -->
+        <p class="text-lg text-gray-600 mt-6 mb-4">
+            The destination was not found, or access was denied.
+        </p>
+        
+        <p class="text-sm text-gray-500 italic">
+            Error Detail: {{ bottom }}
+        </p>
+
+        <a href="javascript:history.go(-1)" class="mt-8 inline-block text-blue-600 hover:text-blue-800 font-medium transition duration-150">
+            Go Back
+        </a>
+    </div>
 {% endblock %}

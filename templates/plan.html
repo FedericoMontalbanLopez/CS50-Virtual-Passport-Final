@@ -10,6 +10,8 @@
 {% endblock %}
 
 {% block main %}
+
+<!-- Main Content Card: Sets the container size and style -->
 <div class="w-full max-w-lg p-8 bg-[#fffbf1] opacity-95 rounded-2xl shadow-2xl border border-gray-100 mx-auto">
     
     <h1 class="text-3xl font-extrabold mb-4 text-center text-gray-800">
@@ -18,7 +20,8 @@
     <p class="text-center text-gray-600 mb-6">
         Tell us where you want to go, and Gemini will suggest fictional adventures to take you there.
     </p>
-
+    
+    <!-- User Input and Submission -->
     <form id="planner-form" class="space-y-4">
         <div class="mb-4">
             <label for="location-input" class="block text-sm font-medium text-gray-700 mb-1">
@@ -36,9 +39,10 @@
 
     <hr class="my-6 border-t border-gray-200">
 
+    <!-- RESULTS SECTION: Dynamic output from the AI -->
     <div id="results-container" class="mt-6">
         <div id="loading-spinner" class="hidden text-center">
-            <p class="text-blue-600 font-semibold mb-2">Planning your virtual journey...</p>
+            <p class="text-[#6daba4] font-semibold mb-2">Planning your virtual journey...</p>
             <div class="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto"></div>
         </div>
 
@@ -89,7 +93,7 @@ async function fetchWithBackoff(url, options, retries = 3, delay = 1000) {
     }
 }
 
-// WRAPPER: Ensures all external scripts (like Marked.js) are loaded before code runs
+// Ensures all external scripts (like Marked.js) are loaded before code runs
 window.onload = function() {
     
     async function generateAdventure(event) {
@@ -97,7 +101,7 @@ window.onload = function() {
         const location = locationInput.value.trim();
         if (!location) return;
 
-        // 1. Set Loading State
+        // Set Loading State
         aiOutput.classList.add('hidden');
         aiOutput.innerHTML = '';
         loadingSpinner.classList.remove('hidden');
@@ -128,8 +132,6 @@ window.onload = function() {
         };
 
         try {
-            // The check for 'marked' is no longer strictly necessary because of window.onload, 
-            // but it serves as a good final safety check.
             if (typeof marked === 'undefined') {
                 throw new Error("Marked.js library is not available. Cannot render Markdown.");
             }
@@ -142,12 +144,12 @@ window.onload = function() {
             if (candidate && candidate.content?.parts?.[0]?.text) {
                 let generatedText = candidate.content.parts[0].text;
                 
-                // 2. Render the Markdown output
+                // Render the Markdown output
                 aiOutput.innerHTML = marked.parse(generatedText); 
                 aiOutput.classList.remove('hidden');
 
             } else {
-                // Handle case where API succeeds but returns no text (e.g., safety block)
+                // Handle case where API succeeds but returns no text 
                 aiOutput.innerHTML = `<p class="text-red-600">Sorry, I couldn't find any adventures for that location or the response was blocked.</p>`;
                 aiOutput.classList.remove('hidden');
             }
@@ -164,7 +166,7 @@ window.onload = function() {
             aiOutput.classList.remove('hidden');
 
         } finally {
-            // 3. Restore Button State
+            // Restore Button State
             loadingSpinner.classList.add('hidden');
             generateButton.disabled = false;
             generateButton.textContent = 'Suggest My Adventure';

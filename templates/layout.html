@@ -18,7 +18,7 @@
 
         <link href="/static/styles.css" rel="stylesheet">
 
-        <title>Final project: {% block title %}{% endblock %}</title>
+        <title>Fictional Passport: {% block title %}{% endblock %}</title>
         
         {% block extra_head %}{% endblock %}
         
@@ -31,7 +31,7 @@
         <nav class="bg-[#BAC5B3] shadow-md p-4 sticky top-0 z-50">
             <div class="container mx-auto flex justify-between items-center">
                 
-                <!-- Logo/Brand -->
+                <!-- Title -->
                 <a class="text-xl font-bold tracking-tight text-gray-900 hover:text-gray-700" href="/">
                     <span class="text-[#885C45]">FICTIONAL PASSPORT</span>
                 </a>
@@ -52,8 +52,8 @@
                     {% else %}
                         
                         <!-- Logged Out Links -->
-                        <a class="text-gray-600 hover:[#6daba4] transition duration-150" href="/register">Register</a>
-                        <a class="text-gray-600 hover:[#6daba4] transition duration-150" href="/login">Log In</a>
+                        <a class="text-gray-600 hover:text-[#6daba4] transition duration-150" href="/register">Register</a>
+                        <a class="text-gray-600 hover:text-[#6daba4] transition duration-150" href="/login">Log In</a>
                     
                     {% endif %}
                 </div>

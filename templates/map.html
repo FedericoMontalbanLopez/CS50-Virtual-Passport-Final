@@ -24,7 +24,7 @@
         <!-- Map Container -->
         <div id="map" class="w-full shadow-lg rounded-xl mb-6 border-4 border-gray-200 z-10 relative" style="height: 60vh;"></div>
         
-        <!-- Form to submit the new Stamp data -->
+        <!-- Form to submit the new stamp data -->
         <form id="stamp-form" action="/pin" method="post" class="bg-[#fffbf1] opacity-95 p-6 rounded-xl shadow-lg border">
             <h2 class="text-2xl font-semibold mb-4 text-center">New Stamp Details</h2>
 
@@ -104,7 +104,7 @@
     <!-- Leaflet JS for map functionality -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
-    <!-- ADDED: Leaflet Control Geocoder JS -->
+    <!-- Leaflet Control Geocoder JS -->
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
     <script>
@@ -198,11 +198,11 @@
                 submitButton.disabled = false;
                 submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
                 instructionMessage.textContent = 'Location selected. Fill in details and click "Stamp Your Passport"!';
-                instructionMessage.classList.remove('text-red-500');
-                instructionMessage.classList.add('text-green-600');
+                instructionMessage.classList.remove('text-[#67766F]');
+                instructionMessage.classList.add('text-[#6daba4]');
             }
 
-            // Generate random coordinates in your specified square
+            // Generate random coordinates in a specified square
             function generateRandomEquatorialCoords() {
                 // Latitude between -2 and +2
                 const lat = Math.random() * (2 - (-2)) + (-2);
@@ -211,13 +211,13 @@
                 return L.latLng(lat, lng);
             }
 
-            // 🎨 Real vs Fictional logic
+            // Real vs Fictional logic
             const locationTypeInputs = document.querySelectorAll('input[name="location_type"]');
             locationTypeInputs.forEach(input => {
                 input.addEventListener('change', function() {
                     if (this.value === 'fictional') {
                         const randomLatLng = generateRandomEquatorialCoords();
-                        map.setView(randomLatLng, 6); // zoom closer after placing fictional pin
+                        map.setView(randomLatLng, 6); 
                         handleMapClick({ latlng: randomLatLng });
                         document.getElementById('location_name').value = "";
                     } else if (currentMarker) {
@@ -227,8 +227,8 @@
                         lonInput.value = '';
                         submitButton.disabled = true;
                         instructionMessage.textContent = 'Click on the map or search to select a location first.';
-                        instructionMessage.classList.remove('text-green-600');
-                        instructionMessage.classList.add('text-red-500');
+                        instructionMessage.classList.remove('text-[#67766F]');
+                        instructionMessage.classList.add('text-[#6daba4]');
                     }
                 });
             });

@@ -18,10 +18,10 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Media</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                         
-                        <!-- ADDED: Go There! Header -->
+                        <!-- Go There! Header -->
                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Go There!</th>
                         
-                        <!-- REMOVED: Duplicate "Action" header -->
+                        <!-- Delte header -->
                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Delete</th>
                     </tr>
                 </thead>
@@ -36,7 +36,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                             {{ stamp.source }}
                         </td>
-                        <!-- Media Type (Means) -->
+                        <!-- Media Type -->
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-[#d8e6ce] text-[#885C45]">
                                 {{ stamp.means }}
@@ -47,7 +47,7 @@
                             {{ stamp.date_only }}
                         </td>
                         
-                        <!-- ADDED: Go There! Icon (Using map link for now) -->
+                        <!-- Go There! action -->
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                             <a href="https://www.google.com/search?q=visit+{{ stamp.location_name }}" title="Go There" 
                                class="text-[#885C45] hover:text-[#BAC5B3] transition duration-150 transform hover:scale-110 inline-block">
@@ -58,7 +58,7 @@
                             </a>
                         </td>
                         
-                        <!-- Delete Action (Original Column) -->
+                        <!-- Delete Action  -->
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                             <form action="/delete_stamp" method="post" class="inline">
                                 <!-- Pass the unique stamp ID securely -->
@@ -89,7 +89,7 @@
         <!-- Pagination (Load More Button) -->
         {% if has_more %}
         <div class="mt-6 text-center">
-            <!-- Link to the next page of stamps (e.g., /history?offset=10) -->
+            <!-- Link to the next page of stamps -->
             <a href="/history?offset={{ next_offset }}" 
                class="bg-[#6daba4] hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full shadow-lg transition duration-150 transform hover:scale-[1.01]">
                 Load 5 More Stamps
@@ -114,12 +114,12 @@
         </div>
 
         <div class="mb-8 border-b pb-4 mt-6">
-            <h2 class="text-xl font-bold mb-6 text-gray-700 text-center">Real or Fictional Breakdown</h2>
+            <h2 class="text-xl font-bold mb-6 text-gray-700 text-center">Real vs Fictional Breakdown</h2>
             <div class="grid grid-cols-2 md:grid-cols-2 gap-3 text-sm font-semibold">
                 {% for stat in real_fiction %}
                 <div class="p-3 bg-[#d8e6ce] rounded-lg shadow-sm">
                     <p class="text-[#885C45] text-lg font-extrabold text-center">{{ stat.count }}</p>
-                    <p class="text-gray-600">{{ stat.real_fiction | capitalize }}</p>
+                    <p class="text-gray-600 text-center text-xs uppercase tracking-wider">{{ stat.real_fiction | capitalize }}</p>
                 </div>
                 {% else %}
                 <p class="col-span-full text-center text-gray-500 text-center">No data yet!</p>

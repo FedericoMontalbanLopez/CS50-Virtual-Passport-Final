@@ -61,7 +61,7 @@ def passport():
 def history():
     """Show history of stamps with additive pagination and media statistics."""
     
-    # 1. Get current total stamps to display (default to 5)
+    # Get current total stamps to display (default to 5)
     try:
         current_total = int(request.args.get("offset", 5))
         if current_total < 5:
@@ -72,7 +72,7 @@ def history():
     user_id = session["user_id"]
     limit = current_total 
 
-    # 2. FETCH PAGINATED STAMPS (2 placeholders, 2 values: user_id, limit)
+    # Fetch Paginated Stmaps
     stamps = db.execute(
         "SELECT id, location_name, source, means, timestamp FROM stamps "
         "WHERE user_id = ? ORDER BY timestamp DESC LIMIT ?",
@@ -81,10 +81,10 @@ def history():
 
     # Process stamps to extract only the date in Python
     for stamp in stamps:
-        # We split by space and take the first element (the date)
+        # Split by space and take the first element (the date)
         stamp['date_only'] = stamp['timestamp'].split(' ')[0]
 
-    # 3. FETCH MEDIA STATISTICS (1 placeholder, 1 value: user_id)
+    # Fetch Media Statistics
     media_stats = db.execute(
         "SELECT means, COUNT(means) AS count FROM stamps "
         "WHERE user_id = ? GROUP BY means ORDER BY count DESC",
@@ -97,8 +97,7 @@ def history():
         user_id     
     )
 
-    # 4. CHECK FOR MORE STAMPS (3 placeholders, 3 values: user_id, 1, limit)
-    # This query uses 3 placeholders for security and filtering.
+    # CHheck for more stamps
     next_stamps_check = db.execute(
         "SELECT id FROM stamps WHERE user_id = ? "
         "ORDER BY timestamp DESC LIMIT ? OFFSET ?",
@@ -116,7 +115,7 @@ def history():
         next_offset=next_offset,
         stamps_loaded=stamps_loaded,
         media_stats=media_stats,
-        real_fiction =real_fiction
+        real_fiction=real_fiction
     )
 
 @app.route("/delete_stamp", methods=["POST"])
@@ -124,19 +123,18 @@ def history():
 def delete_stamp():
     """Deletes a single stamp entry using the stamp_id provided via the form."""
     
-    # 1. Ensure the stamp ID was provided
+    # Ensure the stamp ID was provided
     stamp_id_str = request.form.get("stamp_id")
     if not stamp_id_str:
         flash("Error: No stamp ID provided for deletion.", "danger")
         return redirect("/history")
 
     try:
-        # 2. Convert ID to integer
+        # Convert ID to integer
         stamp_id = int(stamp_id_str)
         user_id = session["user_id"]
 
-        # 3. Execute the DELETE query
-        # CRITICAL: We ensure the stamp belongs to the logged-in user for security.
+        # Execute the DELETE query
         rows_deleted = db.execute(
             "DELETE FROM stamps WHERE id = ? AND user_id = ?",
             stamp_id,
@@ -146,7 +144,6 @@ def delete_stamp():
         if rows_deleted > 0:
             flash("Stamp successfully deleted from your passport!", "success")
         else:
-            # This happens if the stamp ID was invalid or didn't belong to the user
             flash("Error: Could not find or delete that stamp.", "danger")
 
     except ValueError:
@@ -161,9 +158,6 @@ def delete_stamp():
 def login():
     """Log user in"""
 
-    # Forget any user_id
-    
-    
     # Handle POST request
     if request.method == "POST":
         
@@ -248,7 +242,7 @@ def register():
         # Query database for username
         rows = db.execute("SELECT id FROM users WHERE username = ?", username)
         
-        # Log user in by storing their id in session
+        # Log user in by storing their id of session
         session["user_id"] = rows[0]["id"]
 
         flash("Successfully registered!")
@@ -263,7 +257,7 @@ def register():
 def pin():
     """Handles the form submission from the map.html to save a new stamp."""
 
-    # Retrieve data from the submitted form
+    # Retrieve data from submitted form
     location_type = request.form.get("location_type")
     latitude_str = request.form.get("latitude")
     longitude_str = request.form.get("longitude")
@@ -288,7 +282,7 @@ def pin():
         return apology("Invalid geographic coordinates.", 400)
 
 
-    # Insert the new stamp into the 'stamps' table
+    # Insert the new stamp into the stamps table
     try:
         db.execute(
             "INSERT INTO stamps (user_id, location_type, location_name, source, means, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -319,14 +313,14 @@ def map_page():
         user_id
     )
 
-    # NEW LOGIC: Find the last pinned location (the first one since we ordered by DESC in the original query)
+    # Find the last pinned location 
     last_stamp = db.execute(
         "SELECT latitude, longitude FROM stamps "
         "WHERE user_id = ? ORDER BY timestamp DESC LIMIT 1",
         user_id
     )
     
-    # Set default coordinates (e.g., center of US) if no stamps exist
+    # Set default coordinates if no stamps exist
     center_lat = last_stamp[0]["latitude"] if last_stamp else 40
     center_lon = last_stamp[0]["longitude"] if last_stamp else -98
     
